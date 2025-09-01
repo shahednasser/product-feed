@@ -20,10 +20,11 @@ export const buildProductFieldXmlStep = createStep(
       return (
         `<item>` +
           `<g:id>${escape(item.id)}</g:id>` +
-          `<g:title>${escape(item.title)}</title>` +
-          `<g:description>${escape(item.description)}</description>` +
-          `<g:link>${escape(item.link)}</link>` +
+          `<title>${escape(item.title)}</title>` +
+          `<description>${escape(item.description)}</description>` +
+          `<link>${escape(item.link)}</link>` +
           (item.image_link ? `<g:image_link>${escape(item.image_link)}</g:image_link>` : "") +
+          (item.additional_image_link ? `<g:additional_image_link>${escape(item.additional_image_link)}</g:additional_image_link>` : "") +
           `<g:availability>${escape(item.availability)}</g:availability>` +
           `<g:price>${escape(item.price)}</g:price>` +
           (item.sale_price ? `<g:sale_price>${escape(item.sale_price)}</g:sale_price>` : "") +

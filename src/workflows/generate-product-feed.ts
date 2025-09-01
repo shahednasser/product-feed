@@ -1,6 +1,4 @@
-import { QueryContext, MedusaError } from "@medusajs/framework/utils"
-import { createStep, createWorkflow, transform, when, WorkflowResponse, StepResponse } from "@medusajs/framework/workflows-sdk"
-import { useQueryGraphStep } from "@medusajs/medusa/core-flows"
+import { createWorkflow, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
 import { getProductFeedItemsStep } from "./steps/get-product-feed-items"
 import { buildProductFieldXmlStep } from "./steps/build-product-field-xml"
 
@@ -23,5 +21,3 @@ export const generateProductFeedWorkflow = createWorkflow(
 )
 
 export default generateProductFeedWorkflow
-
-

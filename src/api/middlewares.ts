@@ -8,8 +8,8 @@ export default defineMiddlewares({
       methods: ["GET"],
       middlewares: [
         validateAndTransformQuery(z.object({
-          currency_code: z.string().optional().default("usd"),
-          country_code: z.string().optional().default("us"),
+          currency_code: z.string(),
+          country_code: z.string(),
         }), {})
       ]
     }

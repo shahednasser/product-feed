@@ -22,11 +22,11 @@ type StepInput = {
 }
 
 const formatPrice = (price: number, currency_code: string) => {
-  return new Intl.NumberFormat("en-US", {
+  return `${new Intl.NumberFormat("en-US", {
     currency: currency_code,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(price)
+  }).format(price)} ${currency_code.toUpperCase()}`
 }
 
 export const getProductFeedItemsStep = createStep(
@@ -40,6 +40,8 @@ export const getProductFeedItemsStep = createStep(
   const limit = 100
   let offset = 0
   let count = 0
+  const countryCode = input.country_code.toLowerCase()
+  const currencyCode = input.currency_code.toLowerCase()
 
   do {
     const {
@@ -58,7 +60,8 @@ export const getProductFeedItemsStep = createStep(
         "variants.*",
         "variants.calculated_price.*",
         "sales_channels.*",
-        "sales_channels.stock_locations.*"
+        "sales_channels.stock_locations.*",
+        "sales_channels.stock_locations.address.*"
       ],
       filters: {
         status: "published",
@@ -66,7 +69,7 @@ export const getProductFeedItemsStep = createStep(
       context: {
         variants: {
           calculated_price: QueryContext({
-            currency_code: input.currency_code,
+            currency_code: currencyCode,
           }),
         }
       },
@@ -79,7 +82,7 @@ export const getProductFeedItemsStep = createStep(
       if (!product.variants.length) continue
       const salesChannel = product.sales_channels?.find((channel) => {
         return channel?.stock_locations?.some((location) => {
-          return location?.address?.country_code === input.country_code
+          return location?.address?.country_code.toLowerCase() === countryCode
         })
       })
 
@@ -87,6 +90,8 @@ export const getProductFeedItemsStep = createStep(
         variant_ids: product.variants.map((variant) => variant.id),
         sales_channel_id: salesChannel?.id,
       }) : undefined
+
+      console.log(salesChannel, availability, product.sales_channels?.[0]?.stock_locations)
 
       for (const variant of product.variants) {
         // @ts-ignore
@@ -101,12 +106,12 @@ export const getProductFeedItemsStep = createStep(
           id: variant.id,
           title: product.title,
           description: product.description ?? "",
-          link: `${storefrontUrl}/${input.country_code}/${product.handle}`,
+          link: `${storefrontUrl || ""}/${input.country_code}/${product.handle}`,
           image_link: product.thumbnail ?? "",
           additional_image_link: product.images?.map((image) => image.url)?.join(","),
           availability: stockStatus,
-          price: formatPrice(originalPrice as number, input.currency_code),
-          sale_price: salePrice ? formatPrice(salePrice as number, input.currency_code) : undefined,
+          price: formatPrice(originalPrice as number, currencyCode),
+          sale_price: salePrice ? formatPrice(salePrice as number, currencyCode) : undefined,
           condition: "new", // TODO add condition if supported
           brand: "" // TODO add brands if supported
         })
