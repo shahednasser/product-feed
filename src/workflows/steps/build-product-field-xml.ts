@@ -29,7 +29,7 @@ export const buildProductFieldXmlStep = createStep(
           `<g:price>${escape(item.price)}</g:price>` +
           (item.sale_price ? `<g:sale_price>${escape(item.sale_price)}</g:sale_price>` : "") +
           `<g:condition>${escape(item.condition || "new")}</g:condition>` +
-          (item.brand ? `<g:brand>${escape(item.brand)}</g:brand>` : "") +
+          `<g:brand>${escape(item.brand || "Medusa")}</g:brand>` +
         `</item>`
       )
     }).join("")
