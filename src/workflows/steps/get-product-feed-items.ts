@@ -92,12 +92,10 @@ export const getProductFeedItemsStep = createStep(
         sales_channel_id: salesChannel?.id,
       }) : undefined
 
-      console.log(salesChannel, availability, product.sales_channels?.[0]?.stock_locations)
-
       for (const variant of product.variants) {
         // @ts-ignore
         const calculatedPrice = variant.calculated_price as CalculatedPriceSet
-        const hasOriginalPrice = calculatedPrice?.original_amount
+        const hasOriginalPrice = calculatedPrice?.original_amount !== calculatedPrice?.calculated_amount
         const originalPrice = hasOriginalPrice ? calculatedPrice.original_amount : calculatedPrice.calculated_amount
         const salePrice = hasOriginalPrice ? calculatedPrice.calculated_amount : undefined
         const stockStatus = !variant.manage_inventory ? "in stock" : 
