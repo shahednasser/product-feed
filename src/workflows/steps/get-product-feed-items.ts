@@ -12,6 +12,7 @@ export type FeedItem = {
   availability: string
   price: string
   sale_price?: string
+  item_group_id: string
   condition?: string
   brand?: string
 }
@@ -112,6 +113,7 @@ export const getProductFeedItemsStep = createStep(
           availability: stockStatus,
           price: formatPrice(originalPrice as number, currencyCode),
           sale_price: salePrice ? formatPrice(salePrice as number, currencyCode) : undefined,
+          item_group_id: product.id,
           condition: "new", // TODO add condition if supported
           brand: "" // TODO add brands if supported
         })
